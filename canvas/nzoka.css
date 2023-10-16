@@ -1,0 +1,8 @@
+#board{
+    border: solid 1px black;
+}
+body{
+    text-align: center;
+    background: #000;
+    /* background: linear-gradient(45deg,rgb(160, 131, 131) 5%, rgb(49, 2, 2) 45%, rgba(109, 20, 20, 0.274) 5%); */
+}
