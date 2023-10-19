@@ -4,10 +4,15 @@ const ctx = board.getContext("2d")
 const boxSize = 25
 const rows = 20
 const cols = 20
+
+let starting = false
+let dcmls1 = -1.1
+let dcmls2 = 1.1
+let radius = 14
 let nzokaX =  boxSize * 5
 let nzokaY =  boxSize * 5
-let foodX = boxSize * 8
-let foodY = boxSize * 8
+let foodX = boxSize * 8.1
+let foodY = boxSize * 8.1
 let nzokaMoveX = 0
 let nzokaMoveY = 0
 const nzokaBody =[]
@@ -18,17 +23,24 @@ window.onload = function () {
 
     randFood()
     window.addEventListener("keyup", nzokaMove)
-    // update()
+    start()
+    
+}
+function start(){
+    if(starting){
+        return
+    }
     console.log(setInterval(update, 1000/10));
 }
+
 function update(){
     paintBoard()
     ctx.fillStyle = "grey"
     ctx.fillRect(0, 0, board.width, board.height)
-    drawLines()
+    // drawLines()
     nzokaPaint()
     foodPaint()
-    collDetect()
+    console.log(collDetect());
 
 }
 function drawLines(){
@@ -57,7 +69,11 @@ function paintBoard(){
 }
 function foodPaint(){
     ctx.fillStyle = "orange"
+    ctx.strokeStyle = "white"
     ctx.fillRect(foodX, foodY, boxSize, boxSize)
+    // ctx.fill()
+    // ctx.stroke()
+
 }
 function nzokaPaint(){
     ctx.fillStyle = "lime"
@@ -83,7 +99,7 @@ function randFood(){
 }
 function nzokaMove(e){
     let key = e.code
-    console.log(key);
+    // console.log(key);
     switch (key) {
         case "KeyK":
             if(key == "KeyK" && nzokaMoveY != -1){
@@ -112,14 +128,31 @@ function nzokaMove(e){
     }
 }
 function collDetect(){
-    if(nzokaX == foodX && nzokaY == foodY){
-    
+    if(nzokaX == (foodX) && nzokaY == (foodY)){
         nzokaBody.push([foodX, foodY])
         // console.log(nzokaBody)
         randFood()
     }
-    if(nzokaX > board.width || nzokaY > board.height){
-        nzokaX += (board.width - nzokaY)
-        nzokaY -= (board.height + nzokaX)
+
+    for(let i = 0; i < nzokaBody.length; i++){
+        if(nzokaX == nzokaBody[i][0] && nzokaY == nzokaBody[i][1]){
+            starting = true
+        }
+        
+    }
+
+    if(nzokaY > board.height){
+        nzokaY += (rows * boxSize * dcmls1)
+    }
+    else if(nzokaY < 0 ){
+        nzokaY += (rows * boxSize * dcmls2)
+        console.log(nzokaY);
+    }
+    else if(nzokaX > board.width){
+        nzokaX += (rows * boxSize * dcmls1)
+    }
+    else if(nzokaX < 0 ){
+        nzokaX += (rows * boxSize * dcmls2)
+        console.log(nzokaX);
     }
 }
